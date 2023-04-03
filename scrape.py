@@ -1,8 +1,14 @@
 import requests
+from flask import request
 from bs4 import BeautifulSoup
 
-@app.route("/api/jobs")
-def scrape(url):
+
+def scrape_linkedin(job_name: str, location_name: str ):
+    job_name = job_name.replace(" ", '%20')
+    location_name = location_name.replace(" ", '%20')
+    url = f"https://www.linkedin.com/jobs/search?keywords={job_name}&location={location_name}"
+
+
     res = requests.get(url)
     if res.status_code == 200:
         print('It\'s an ok ')
@@ -37,8 +43,10 @@ def scrape(url):
 
     for job in jobs:
         print(job, end='\n'*2)
+    print(len(jobs))         
+    
+    return jobs                                                 
 
 
 if __name__ == '__main__':
-    url = 'https://www.linkedin.com/jobs/search?keywords=software%20engineering&location=United%20States&geoId=103644278&trk=public_jobs_jobs-search-bar_search-submit&position=1&pageNum=0'
-    scrape(url)
+    scrape_linkedin('Software Engineering','San Jose')
