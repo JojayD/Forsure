@@ -8,8 +8,11 @@ def scrape_linkedin(job_name: str, location_name: str ):
     location_name = location_name.replace(" ", '%20')
     url = f"https://www.linkedin.com/jobs/search?keywords={job_name}&location={location_name}"
 
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36'
+    }
 
-    res = requests.get(url)
+    res = requests.get(url, headers=headers)
     if res.status_code == 200:
         print('It\'s an ok ')
         soup = BeautifulSoup(res.content, "html.parser")
@@ -41,12 +44,13 @@ def scrape_linkedin(job_name: str, location_name: str ):
         jobs.append({'title': title_el, 'time': time_el,
                      'link': link, 'location': location})
 
-    for job in jobs:
-        print(job, end='\n'*2)
-    print(len(jobs))         
+    # for job in jobs:
+        # print(job, end='\n'*2)
     
     return jobs                                                 
 
 
+
 if __name__ == '__main__':
-    scrape_linkedin('Software Engineering','San Jose')
+    scrape_linkedin('finance', 'sacramento')
+

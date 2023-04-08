@@ -1,4 +1,14 @@
 .form__container{
+  display: flex;
+  justify-content: space-between;
+
+}
+.form-width{
+    width: 300px;
+}
+
+.button__container{
+    margin-top: 2rem;
     display: flex;
     justify-content: center;
 }
