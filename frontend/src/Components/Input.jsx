@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {
-    Button,
+    Button, Card,
     Dropdown,
     DropdownButton,
     Form,
     FormControl
 } from 'react-bootstrap';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from '../Styles/Input.module.css'
 import {city_names} from '../data/cities.js'
@@ -33,9 +34,10 @@ function Input(props) {
         const response = await fetch(url, {
           mode: 'cors'
         });
-        let data = await response.json();
-        setJobData(data);
-        console.log("Response data:", data);
+        const [arr1, arr2] = await response.json();
+        const combinedArray = [...arr1,...arr2];
+        setJobData(combinedArray);
+        console.log("Response data:", combinedArray);
       } catch (error) {
         if (error instanceof SyntaxError) {
           console.error("Error occurred while fetching data: Response not valid JSON");
@@ -43,6 +45,10 @@ function Input(props) {
           console.error("Error occurred while fetching data:", error);
         }
       }
+
+
+
+
     }
 
 
@@ -92,6 +98,10 @@ function Input(props) {
                     </div>
                 </div>
             </Form>
+
+            <div>
+                <Card jobData ={jobData}/>
+            </div>
         </div>);
 }
 

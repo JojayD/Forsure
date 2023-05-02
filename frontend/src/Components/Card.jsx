@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Card} from "react-bootstrap";
 
 function Card(props) {
+    const {items } = props
     return (
         <Card style = {{width : '18rem'}}>
             <Card.Title>{props.title}</Card.Title>

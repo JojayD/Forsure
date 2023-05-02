@@ -1,7 +1,7 @@
 import json
 
 from flask import Flask ,send_from_directory ,jsonify ,request ,make_response
-from scrape import scrape_linkedin
+from scrape import combine_scraped_jobs
 
 app = Flask(__name__, static_folder="frontend/dist", static_url_path="")
 
@@ -19,7 +19,8 @@ def search():
     print('API received')
     job_title = request.args.get("job_title")
     location = request.args.get("location")
-    jobs = scrape_linkedin(job_title, location)
+    jobs = combine_scraped_jobs(job_title, location)
+
     print("Jobs data:", jobs)  # Add this line to print the jobs data
 
     try:
