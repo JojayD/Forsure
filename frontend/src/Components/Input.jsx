@@ -6,7 +6,7 @@ import {
     Form,
     FormControl
 } from 'react-bootstrap';
-
+import JobCard from "./JobCard.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from '../Styles/Input.module.css'
 import {city_names} from '../data/cities.js'
@@ -46,9 +46,8 @@ function Input(props) {
         }
       }
 
-
-
-
+      setJob("");
+      setLocation("");
     }
 
 
@@ -58,7 +57,7 @@ function Input(props) {
     return (
         <div>
             <Form onSubmit={handleSubmit}>
-                <div>
+                <div className={styles['parent-form__container']}>
                     <div className={styles.form__container}>
                         <div className={styles['form-width']}>
                             <FormControl type='text'
@@ -91,7 +90,6 @@ function Input(props) {
                             )}
 
                         </div>
-
                     </div>
                     <div className={styles.button__container}>
                         <Button type= 'submit' variant='primary'>Submit</Button>
@@ -100,7 +98,7 @@ function Input(props) {
             </Form>
 
             <div>
-                <Card jobData ={jobData}/>
+                <JobCard jobData ={jobData}/>
             </div>
         </div>);
 }

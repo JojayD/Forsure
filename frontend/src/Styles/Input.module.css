@@ -12,3 +12,8 @@
     display: flex;
     justify-content: center;
 }
+
+.parent-form__container{
+    margin-bottom:2rem
+}
+
