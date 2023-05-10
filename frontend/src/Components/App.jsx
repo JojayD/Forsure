@@ -1,15 +1,23 @@
 import { useState } from 'react'
 import '../Styles/App.css'
 import '../Styles/index.css'
-import Header from "./Header.jsx";
+import LoginPage from "./LoginPage.jsx";
+import Header    from "./Header.jsx";
 import Input from "./Input.jsx";
 function App() {
-  return(
+
+    const[isAuthenticated, setIsAuthenticated] = useState(false)
+
+    return(
       <div className='app__container'>
-          <Header/>
-          <Input/>
+          {isAuthenticated ?
+              (<>
+                  <Header/>
+                  <Input/>
+              </>) :
+              (<LoginPage setIsAuthenticated = {setIsAuthenticated}/>)}
       </div>
-  )
+    )
 
 }
 

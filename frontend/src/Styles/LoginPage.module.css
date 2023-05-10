@@ -1,0 +1,31 @@
+*{
+    /*border: 1px red solid;*/
+}
+
+/*CLASSES*/
+
+.title{
+    font-size: 3.5vw;
+}
+
+.container-parent{
+    text-align: center;
+}
+
+
+.title-login{
+
+}
+
+.container__input{
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 2rem;
+}
+
+.form-width{
+    width: 100%;
+    max-width: 300px;
+
+}

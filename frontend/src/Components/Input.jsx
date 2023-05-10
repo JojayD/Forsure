@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
     Button, Card,
+    Spinner,
     Dropdown,
     DropdownButton,
     Form,
@@ -16,6 +17,7 @@ function Input(props) {
     const [location, setLocation] = useState('');
     const [suggestion, setSuggestions] = useState([]);
     const [jobData, setJobData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false)
     function handleInput(event) {
         const input = event.target.value.toLowerCase();
         const makeSuggestions = city_names.filter(city =>
@@ -29,7 +31,7 @@ function Input(props) {
       url.searchParams.append("job_title", job.trim());
       url.searchParams.append("location", location.trim());
       console.log("Sending request to:", url);
-
+      setIsLoading(true);
       try {
         const response = await fetch(url, {
           mode: 'cors'
@@ -50,7 +52,22 @@ function Input(props) {
       setLocation("");
     }
 
-
+    function renderDropDown(){
+        if(location && suggestion.length > 0){
+            return(
+                <DropdownButton id="dropdown-basic-button"
+                                title="Select Location"
+                                onSelect={(location) => setLocation(location)}>
+                    {suggestion.map((city, index) => {
+                        return (
+                            <Dropdown.Item key={index}
+                                           eventKey={city}>{city}</Dropdown.Item>
+                        );
+                    })}
+                </DropdownButton>)
+        }
+        return null
+    }
 
 
 
@@ -75,20 +92,7 @@ function Input(props) {
                                 value={location}
                                 onChange={handleInput}
                             />
-                            {location && suggestion.length > 0 && (
-                                <DropdownButton id="dropdown-basic-button"
-                                                title="Select Location"
-                                                onSelect={(location) => setLocation(location)}>
-                                    {suggestion.map((city, index) => {
-                                        return (
-                                            <Dropdown.Item key={index}
-                                                           eventKey={city}>{city}</Dropdown.Item>
-                                        );
-                                    })}
-                                </DropdownButton>
-
-                            )}
-
+                            {renderDropDown()}
                         </div>
                     </div>
                     <div className={styles.button__container}>
