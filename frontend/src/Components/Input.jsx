@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Button, Card,
     Spinner,
@@ -13,12 +13,12 @@ import styles from '../Styles/Input.module.css'
 import {city_names} from '../data/cities.js'
 
 function Input(props) {
-    const {colorMode} = props;
+    const {colorMode, jobData , setJobData} = props;
     const [job, setJob] = useState('')
     const [location, setLocation] = useState('');
     const [suggestion, setSuggestions] = useState([]);
-    const [jobData, setJobData] = useState([]);
     const [isLoading, setIsLoading] = useState(false)
+
     function handleInput(event) {
         const input = event.target.value.toLowerCase();
         const makeSuggestions = city_names.filter(city =>
@@ -26,6 +26,7 @@ function Input(props) {
         setSuggestions(makeSuggestions)
         setLocation(input)
     }
+
     async function handleSubmit(event) {
       event.preventDefault();
       const url = new URL("http://localhost:5001/api/search");
@@ -70,7 +71,6 @@ function Input(props) {
         return null
     }
 
-
     return (
         <div>
             <Form onSubmit={handleSubmit}>
@@ -80,8 +80,7 @@ function Input(props) {
                             <FormControl type='text'
                                          placeholder='Search for jobs!'
                                          value={job}
-                                         onChange={(e) => {setJob(e.target.value)
-                                         }}/>
+                                         onChange={(e) => {setJob(e.target.value)}}/>
                         </div>
                         <div className={styles['form-width']}>
                             <FormControl
@@ -99,14 +98,12 @@ function Input(props) {
                 </div>
             </Form>
             {isLoading ?
-
                 (
                     <div className={styles.spinner}>
                         <Spinner animation="border" role="status">
                             <span className="sr-only">Loading data...</span>
                         </Spinner>
                     </div>
-
 
                 ) :
                 (<div>

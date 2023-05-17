@@ -6,9 +6,15 @@ import styles   from '../Styles/JobCard.module.css';
 
 function JobCard(props) {
   const { jobData, colorMode } = props;
+
+  if(!jobData){
+      return
+  }else{
+
+  }
   const renderJobCards = () => {
     return jobData.map((job, index) => (
-        <Link to={`/job/${index}`} key={job.link}>
+        <Link to={`/job/${index}`} key={job.link} className={styles.jobLink}>
           <Card
             style={{ width: '24rem',
                   backgroundColor: colorMode ? 'black' : 'white' ,
