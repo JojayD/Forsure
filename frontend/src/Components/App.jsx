@@ -5,7 +5,7 @@ import LoginPage from "./LoginPage.jsx";
 import Header    from "./Header.jsx";
 import Input from "./Input.jsx";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+import JobDetail                                  from "./JobDetail.jsx";
 
 function App() {
     const [colorMode, setColorMode] = useState(false);
@@ -26,6 +26,10 @@ function App() {
                   (<>
                       <Header colorMode = {colorMode} setColorMode={setColorMode} handleToggle = {handleToggle}/>
                       <Input colorMode = {colorMode} />
+                      <Routes>
+                          <Route path="/" element={<Input colorMode={colorMode} setColorMode={setColorMode} handleToggle={handleToggle}/>}/>
+                          <Route path="/job/:jobId" element={<JobDetail colorMode={colorMode} setColorMode={setColorMode} handleToggle={handleToggle}/>}/>
+                      </Routes>
                   </>) :
                   (<LoginPage setIsAuthenticated = {setIsAuthenticated}/>)}
 
