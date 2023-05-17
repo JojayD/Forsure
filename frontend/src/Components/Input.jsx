@@ -13,6 +13,7 @@ import styles from '../Styles/Input.module.css'
 import {city_names} from '../data/cities.js'
 
 function Input(props) {
+    const {colorMode} = props;
     const [job, setJob] = useState('')
     const [location, setLocation] = useState('');
     const [suggestion, setSuggestions] = useState([]);
@@ -47,7 +48,7 @@ function Input(props) {
           console.error("Error occurred while fetching data:", error);
         }
       }
-
+      setIsLoading(false)
       setJob("");
       setLocation("");
     }
@@ -70,7 +71,6 @@ function Input(props) {
     }
 
 
-
     return (
         <div>
             <Form onSubmit={handleSubmit}>
@@ -80,9 +80,7 @@ function Input(props) {
                             <FormControl type='text'
                                          placeholder='Search for jobs!'
                                          value={job}
-                                         onChange={(e) => {
-                                             setJob(e.target.value)
-                                             console.log(job)
+                                         onChange={(e) => {setJob(e.target.value)
                                          }}/>
                         </div>
                         <div className={styles['form-width']}>
@@ -100,10 +98,21 @@ function Input(props) {
                     </div>
                 </div>
             </Form>
+            {isLoading ?
 
-            <div>
-                <JobCard jobData ={jobData}/>
-            </div>
+                (
+                    <div className={styles.spinner}>
+                        <Spinner animation="border" role="status">
+                            <span className="sr-only">Loading data...</span>
+                        </Spinner>
+                    </div>
+
+
+                ) :
+                (<div>
+                    <JobCard jobData ={jobData} colorMode={colorMode}/>
+                </div>)}
+
         </div>);
 }
 

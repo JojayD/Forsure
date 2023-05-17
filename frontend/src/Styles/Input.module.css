@@ -17,3 +17,8 @@
     margin-bottom:2rem
 }
 
+.spinner{
+    display: flex;
+    justify-content: center;
+}
+

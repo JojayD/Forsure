@@ -4,3 +4,13 @@
       grid-gap: 1rem;
       margin: 1rem 0;
 }
+
+.custom-dark-mode {
+    background-color: black;
+    color: white;
+}
+
+.custom-light-mode {
+    background-color: white;
+    color: black;
+}

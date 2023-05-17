@@ -45,7 +45,6 @@ function LoginPage(props) {
             <FormControl
               type="password"
               placeholder="Password"
-              required={True}
               value={password}
               onChange={(e) => handleInput(e, setPassword)}
             />

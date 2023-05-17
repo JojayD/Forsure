@@ -3,9 +3,9 @@
 .container{
     display: flex;
     justify-content: space-between;
+    margin: 1.5rem 0;
 }
 
 .header_title{
-    color: #000000;
     font-family: 'Roboto', sans-serif;
 }
