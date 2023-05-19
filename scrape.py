@@ -28,12 +28,11 @@ def scrape_linkedin(job_name: str ,location_name: str):
 
         link_el = job_element.find("a" ,class_ = "base-card__full-link")
         link = link_el.get("href") if link_el else None
-        company_name = job_element.find("h4",
-                                        class_='base-search-card__subtitle').text.strip()
+        company_name = job_element.find("h4" ,
+                                        class_ = 'base-search-card__subtitle').text.strip()
 
-        print(company_name)
-        location_el = job_element.find("span" ,
-                                       class_ = "job-search-card__location")
+        location_el = job_element.find("span" ,class_ =
+        "job-search-card__location")
         location = location_el.text.strip() if location_el else None
 
         jobs.append({
@@ -42,7 +41,6 @@ def scrape_linkedin(job_name: str ,location_name: str):
             "location": location ,
             "link": link
         })
-
 
     return jobs
 
