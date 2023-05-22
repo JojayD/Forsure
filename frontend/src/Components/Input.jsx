@@ -73,7 +73,7 @@ function Input(props) {
 
     return (
         <div>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={e=>handleSubmit(e)}>
                 <div className={styles['parent-form__container']}>
                     <div className={styles.form__container}>
                         <div className={styles['form-width']}>

@@ -15,6 +15,7 @@ function JobDetail({colorMode, jobData}) {
   console.log(jobData)
   return (
       <div>
+
         <Card
           style={{
             width: '24rem',
@@ -22,6 +23,7 @@ function JobDetail({colorMode, jobData}) {
             color: colorMode ? 'white' : 'black'
           }}
         >
+
           <Card.Body>
             <Card.Title>{job.title}</Card.Title>
             <Card.Subtitle className="mb-2">{job.company}</Card.Subtitle>

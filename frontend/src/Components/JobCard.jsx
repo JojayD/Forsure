@@ -1,51 +1,81 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styles from '../Styles/JobCard.module.css';
-import {useState} from "react";
+import { getDatabase, ref, set } from 'firebase/database';
+import { useState } from 'react';
+
 function JobCard(props) {
+  const [disabled, setDisabled] = useState(false);
   const { jobData, colorMode } = props;
 
   if (!jobData) {
     return null;
   }
 
+   function saveJob(event, index) {
+    let job = jobData[index];
+    const jobDataToSave = {
+      'title': job.title,
+      'company': job.company,
+      'location': job.location,
+      // Add any additional data you want to save
+    };
 
-
-  function handleClickView(event){
-      event.stopPropagation()
+    console.log(`${index} clicked`)
+    function writeUserData(userId, name, email) {
+      const db = getDatabase();
+      set(ref(db, 'users/' + userIdGenerator()), jobDataToSave);
+    }
   }
 
-  function userIdGenerator(){
+  function handleViewClick(event) {
+    event.stopPropagation();
+  }
 
+  function userIdGenerator() {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let i = 0;
+    while (i < 4) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+      i++;
+    }
+    return result;
   }
 
   const renderJobCards = () => {
     return jobData.map((job, index) => (
-      <Link to={`/job/${index}`} key={job.link} className={styles.jobLink}>
-        <Card
-          style={{
-            width: '24rem',
-            backgroundColor: colorMode ? 'black' : 'white',
-            color: colorMode ? 'white' : 'black',
-          }}
-          key={job.link}
-          className={colorMode ? styles.customDarkMode : styles.customLightMode}
-          id={}
-        >
-          <Card.Body>
-            <Card.Title>{job.title}</Card.Title>
-            <Card.Subtitle className="mb-2" style={{ color: colorMode ? 'white' : 'black' }}>
-              {job.company}
-            </Card.Subtitle>
-            <Card.Subtitle className="mb-2" style={{ color: colorMode ? 'white' : 'black' }}>
-              {job.location}
-            </Card.Subtitle>
-            <Card.Link href={job.link} target="_blank" onClick={handleViewClick}>View</Card.Link>
-          </Card.Body>
-        </Card>
-      </Link>
+      <div key={job.link}>
+          <Card
+            style={{
+              width: '24rem',
+              backgroundColor: colorMode ? 'black' : 'white',
+              color: colorMode ? 'white' : 'black',
+            }}
+            className={colorMode ? styles.customDarkMode : styles.customLightMode}
+          >
+            <Card.Body>
+              <Card.Title>{job.title}</Card.Title>
+              <Card.Subtitle className="mb-2" style={{ color: colorMode ? 'white' : 'black' }}>
+                {job.company}
+              </Card.Subtitle>
+              <Card.Subtitle className="mb-2" style={{ color: colorMode ? 'white' : 'black' }}>
+                {job.location}
+              </Card.Subtitle>
+              <div className={styles['container-button']}>
+                <Link to={`/job/${index}`} className={styles.jobLink}>
+                  <Card.Link href={job.link} target="_blank" onClick={handleViewClick}>
+                    View
+                  </Card.Link>
+                </Link>
+                <Button onClick={(event)=>saveJob(event, index)}>Save</Button>
+
+              </div>
+            </Card.Body>
+          </Card>
+      </div>
     ));
   };
 
