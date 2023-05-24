@@ -13,17 +13,7 @@ const firebaseConfig = {
   measurementId: "G-TL35HCQTC8"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+export const app = initializeApp(firebaseConfig);
+// export const db = getDatabase(app);
 
 
-const data = {
-  userId: '123123',
-  username: 'jojo23',
-  email: 'jojo23@gmail.com'
-}
-
-set(ref(db, 'users/' + data.userId), {
-  username: data.username,
-  email: data.email,
-});
