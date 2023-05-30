@@ -9,3 +9,9 @@
 .header_title{
     font-family: 'Roboto', sans-serif;
 }
+.action__buttons{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    vertical-align: center;
+}

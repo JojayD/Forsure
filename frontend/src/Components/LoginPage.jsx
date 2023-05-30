@@ -1,14 +1,17 @@
-import React, { useContext, useState } from 'react'
-import styles                          from '../Styles/LoginPage.module.css'
-import { Button, Form, FormControl }   from 'react-bootstrap'
-import { AuthContext }                 from '../../Context/AuthContext.jsx'
-import { getDatabase, ref, set, get, child }       from 'firebase/database'
+import React, { useContext, useState }       from 'react'
+import styles
+                                             from '../Styles/LoginPage.module.css'
+import { Button, Form, FormControl }         from 'react-bootstrap'
+import { AuthContext }                       from '../Context/AuthContext.jsx'
+import { child, get, getDatabase, ref, set } from 'firebase/database'
 import {
   app
-}                                      from '/Users/jojo/flask-vite-react/frontend/firebase/firebase.mjs'
+}                                            from '/Users/jojo/flask-vite-react/frontend/firebase/firebase.mjs'
 
 function LoginPage (props) {
-  const { login } = useContext(AuthContext)
+  const  authContext  = useContext(AuthContext);
+
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [validEmail, setValidEmail] = useState(false)
@@ -21,26 +24,36 @@ function LoginPage (props) {
       setPassword('')
       console.log(email)
       return
+    } else {
+      authContext.login(email, password)
+      readData()
+      props.setIsAuthenticated(true)
     }
-    writeUserData(userIdGenerator(), email, password)
-    props.setIsAuthenticated(true)
+
   }
 
-  function writeUserData (userId, email, password) {
+  function writeUserData (email, password) {
     const db = getDatabase(app)
-    set(ref(db, 'users/' + userId), {
+    console.log(`Here is the password/email:${authContext.email}, ${authContext.password}`)
+    console.log('Print from LoginPage.jsx')
+    set(ref(db, `users/${email.substring(0, email.indexOf('@'))}`), {
       'email': email,
+      'id': userIdGenerator(),
       'password': password,
-      'userSavedJobs': []
+      'userSavedJobs':{}
     })
   }
 
+  //Function to check if a user has been made already
   function readData () {
     const dbRef = ref(getDatabase(app))
-    get(child(dbRef, `users/${userId}`)).then((snapshot) => {
+    get(child(dbRef, `users/${email.substring(0, email.indexOf('@'))}`)).then((snapshot) => {
       if (snapshot.exists()) {
+        console.log('Email exists!')
+        console.log(authContext.email, authContext.password)
         console.log(snapshot.val())
       } else {
+        writeUserData(email, password)
         console.log('No data available')
       }
     }).catch((error) => {
@@ -69,6 +82,7 @@ function LoginPage (props) {
   }
 
   return (
+
     <Form onSubmit={handleSubmit}>
       <div className={styles['container-parent']}>
         <div className={styles['title-login']}>
@@ -98,4 +112,4 @@ function LoginPage (props) {
   )
 }
 
-export default LoginPage
+export default LoginPage;

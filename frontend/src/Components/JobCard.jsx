@@ -1,35 +1,47 @@
-import React, { useState, useContext } from 'react'
-import { AuthContext }                 from '../../Context/AuthContext.jsx'
+import React, { useContext, useState } from 'react'
+import { AuthContext }                 from '../Context/AuthContext.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Button, Card }          from 'react-bootstrap'
-import { Link }                  from 'react-router-dom'
-import styles                    from '../Styles/JobCard.module.css'
-import { getDatabase, ref, set } from 'firebase/database'
+import { Button, Card }                from 'react-bootstrap'
+import { Link }                        from 'react-router-dom'
+import styles                          from '../Styles/JobCard.module.css'
+import { getDatabase, ref, set }       from 'firebase/database'
+import {
+  app
+}                                      from '/Users/jojo/flask-vite-react/frontend/firebase/firebase.mjs'
 
 function JobCard (props) {
-  const [disabled, setDisabled] = useState(false)
+
   const { jobData, colorMode } = props
-  const authContext = useContext(AuthContext);
+  const  authContext  = useContext(AuthContext);
+  console.log('Email: ', authContext.email);
+  console.log('Password: ', authContext.password);
   if (!jobData) {
-    return null
+    return null;
   }
 
-  function saveJob (event, index, name, email) {
+  function saveJob (event, index) {
+
     let job = jobData[index]
     const jobDataToSave = {
       'title': job.title,
       'company': job.company,
       'location': job.location,
-      // Add any additional data you want to save
+      'link': job.link
     }
 
-    writeUserData()
+    function writeUserData (email) {
+      console.log('email: ', email)
+      console.log(jobDataToSave)
+      const db = getDatabase(app)
+      set(ref(db, `users/${email.substring(0, email.indexOf('@'))}/userSavedJobs/job_${userIdGenerator()}`), jobDataToSave)
+
+    }
+
+    writeUserData(authContext.email)
+    alert(`${job.title} has been saved!`)
     console.log(`${index} clicked`)
 
-    function writeUserData (userId, name, email) {
-      const db = getDatabase()
-      set(ref(db, `users/${name}` ), jobDataToSave)
-    }
+
   }
 
   function handleViewClick (event) {
@@ -48,6 +60,7 @@ function JobCard (props) {
   }
 
   const renderJobCards = () => {
+    console.log('Rendering cards!')
     return jobData.map((job, index) => (
 
       <div key={job.link}>
@@ -88,4 +101,4 @@ function JobCard (props) {
   return <div className={styles['job-grid-container']}>{renderJobCards()}</div>
 }
 
-export default JobCard
+export default JobCard;
