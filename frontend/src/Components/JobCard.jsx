@@ -72,6 +72,7 @@ function JobCard (props) {
           }}
           className={colorMode ? styles.customDarkMode : styles.customLightMode}
         >
+          <Link to={`/job/${index}`} className={styles.jobLink}>
           <Card.Body>
             <Card.Title>{job.title}</Card.Title>
             <Card.Subtitle className="mb-2"
@@ -83,16 +84,15 @@ function JobCard (props) {
               {job.location}
             </Card.Subtitle>
             <div className={styles['container-button']}>
-              <Link to={`/job/${index}`} className={styles.jobLink}>
                 <Card.Link href={job.link} target="_blank"
                            onClick={handleViewClick}>
                   View
                 </Card.Link>
-              </Link>
               <Button onClick={(event) => saveJob(event, index)}>Save</Button>
 
             </div>
           </Card.Body>
+          </Link>
         </Card>
       </div>
     ))
