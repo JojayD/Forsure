@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react'
 
-export const AuthContext = createContext();
+export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -8,8 +8,8 @@ export const AuthProvider = ({ children }) => {
   const [password, setPassword] = useState('')
   const login = (email, password) => {
     setEmail(email)
-    setPassword(password);
-    setIsAuthenticated(true);
+    setPassword(password)
+    setIsAuthenticated(true)
   }
 
   const logout = () => {

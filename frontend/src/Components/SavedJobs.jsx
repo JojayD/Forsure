@@ -1,9 +1,8 @@
-import { Card }                  from 'react-bootstrap'
-import styles                           from '../Styles/JobCard.module.css'
+import { Button, Card } from 'react-bootstrap'
 import React, { useContext, useState }  from 'react'
-import { child, get, getDatabase, ref } from 'firebase/database'
-import { app }                          from '../../firebase/firebase.mjs'
 import { AuthContext }                       from '../Context/AuthContext.jsx'
+import { Link } from 'react-router-dom'
+import styles from '../Styles/SavedJobs.module.css'
 //Use firebase to show the saved jobs and render them
 
 function SavedJobs (props) {
@@ -22,7 +21,6 @@ function SavedJobs (props) {
             backgroundColor: props.colorMode ? 'black' : 'white',
             color: props.colorMode ? 'white' : 'black',
           }}
-          className={props.colorMode ? styles.customDarkMode : styles.customLightMode}
         >
           <Card.Body>
             <Card.Title>{job.title}</Card.Title>
@@ -47,7 +45,12 @@ function SavedJobs (props) {
   }
 
   return (
-    <div>{renderSavedJobCards()}</div>
+    <div>
+      <Link to={`/`}>
+        <Button size={`sm`}>Back</Button>
+      </Link>
+      <div className={styles['styles__saved-jobs']}>{renderSavedJobCards()}</div>
+    </div>
   )
 }
 

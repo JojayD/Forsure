@@ -15,8 +15,15 @@ import { Link }                         from 'react-router-dom'
 library.add(fas, faSun, faMoon)
 
 function Header (props) {
-  const { colorMode, handleToggle } = props
+  const { colorMode, handleToggle } = props;
   const authContext = useContext(AuthContext)
+
+  function handleLogoutEvent(){
+    authContext.logout()
+    alert(`Logging out ${authContext.email}`)
+    props.setIsAuthenticated(false);
+
+  }
 
   function handleSaveEvent (event) {
     console.log('Clicked!')
@@ -46,7 +53,7 @@ function Header (props) {
           <Button variant={`primary`} size={`sm`}
                  onClick={handleSaveEvent}>Saved</Button>
         </Link>
-        <Button variant={`primary`} size={`sm`}>Logout</Button>
+        <Button variant={`primary`} size={`sm`} onClick={handleLogoutEvent}>Logout</Button>
         <FontAwesomeIcon icon={colorMode ? ['fas', 'sun'] : ['fas', 'moon']}
                          onClick={handleToggle}
         />
