@@ -4,12 +4,22 @@
 
 /*CLASSES*/
 
+.form-container{
+    display: flex;
+    justify-content: center;
+}
+
 .title{
     font-size: 3.5vw;
 }
 
 .container-parent{
     text-align: center;
+    margin: 0 auto;
+    padding: 2rem 0 ;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    width: 70vw;
+    height: 90vh;
 }
 
 

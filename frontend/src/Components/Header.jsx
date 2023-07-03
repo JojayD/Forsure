@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import styles                           from '../Styles/Header.module.css'
 import { library }                      from '@fortawesome/fontawesome-svg-core'
 import { faMoon, fas, faSun }           from '@fortawesome/free-solid-svg-icons'
@@ -16,7 +16,7 @@ library.add(fas, faSun, faMoon)
 
 function Header (props) {
   const { colorMode, handleToggle } = props;
-  const authContext = useContext(AuthContext)
+  const authContext = useContext(AuthContext);
 
   function handleLogoutEvent(){
     authContext.logout()
@@ -27,12 +27,14 @@ function Header (props) {
 
   function handleSaveEvent (event) {
     console.log('Clicked!')
-    const dbRef = ref(getDatabase(app))
+    const dbRef = ref(getDatabase(app));
+
     get(child(dbRef, `users/${authContext.email.substring(0, authContext.email.indexOf('@'))}/userSavedJobs`)).then((snapShot) => {
+      props.setSavedJobData([])
       if (snapShot.exists()) {
         snapShot.forEach((childSnapshot) => {
-          console.log(childSnapshot.key, '\n',childSnapshot.val())
-          props.setSavedJobData(prev=>[...prev,childSnapshot.val()])
+          console.log(childSnapshot.key, '\n', childSnapshot.val())
+          props.setSavedJobData(prev => [...prev, childSnapshot.val()])
 
         })
 

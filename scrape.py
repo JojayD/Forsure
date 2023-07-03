@@ -31,15 +31,16 @@ def scrape_linkedin(job_name: str ,location_name: str):
         company_name = job_element.find("h4" ,
                                         class_ = 'base-search-card__subtitle').text.strip()
 
-        location_el = job_element.find("span" ,class_ =
-        "job-search-card__location")
+        location_el = job_element.find("span" ,
+                                       class_ = "job-search-card__location")
         location = location_el.text.strip() if location_el else None
 
         jobs.append({
             "title": title_el ,
             "company": company_name ,
             "location": location ,
-            "link": link
+            "link": link ,
+            # "saved": False
         })
 
     return jobs
@@ -48,6 +49,7 @@ def scrape_linkedin(job_name: str ,location_name: str):
 def scrape_glass_door(job_name ,location_name):
     job_title = job_name.replace(' ' ,'-')
     location = location_name.replace(' ' ,'-')
+
     url = f"https://www.glassdoor.com/Job/{location_name}" \
           f"-{job_name}-SRCH_IL.0,8_IC1147436_KO9,26.htm?context=Jobs&clickSource=searchBox"
 
@@ -56,15 +58,14 @@ def scrape_glass_door(job_name ,location_name):
     }
 
     res = requests.get(url ,headers = headers)
+    soup = BeautifulSoup(res.text ,"html.parser")
     if res.status_code == 200:
         print('It\'s an ok ')
-        soup = BeautifulSoup(res.text ,"html.parser")
         # print(soup.prettify())
     else:
         print('Restricted access')
 
-    job_results = soup.find_all('li' ,
-                                class_ = 'react-job-listing')
+    job_results = soup.find_all('li' , class_ = 'react-job-listing')
 
     jobs = []
 
@@ -88,7 +89,8 @@ def scrape_glass_door(job_name ,location_name):
                     "title": job_title_card ,
                     "company": company_name ,
                     "location": location_name ,
-                    "link": f"https://www.glassdoor.com{link_text}"
+                    "link": f"https://www.glassdoor.com{link_text}" ,
+                    # "saved": False
                 })
 
     return jobs

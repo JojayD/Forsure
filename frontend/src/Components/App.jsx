@@ -12,7 +12,7 @@ function App () {
   const [colorMode, setColorMode] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [jobData, setJobData] = useState([]) // new state variable
-  const [savedJobData, setSavedJobData] = useState([])
+  const [savedJobData, setSavedJobData] = useState([]);
 
   useEffect(() => {
     document.body.style.backgroundColor = colorMode ? '#27272a' : 'white'

@@ -1,104 +1,79 @@
-import React, { useContext, useState } from 'react'
-import { AuthContext }                 from '../Context/AuthContext.jsx'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { Button, Card }                from 'react-bootstrap'
-import { Link }                        from 'react-router-dom'
-import styles                          from '../Styles/JobCard.module.css'
-import { getDatabase, ref, set }       from 'firebase/database'
+import React, { useContext, useEffect, useState } from 'react'
+import { Button, Card }                           from 'react-bootstrap'
+import styles
+                                                  from '../Styles/JobCard.module.css'
+import { Link }                                   from 'react-router-dom'
+import { getDatabase, off, onValue, ref }         from 'firebase/database'
 import {
   app
-}                                      from '/Users/jojo/flask-vite-react/frontend/firebase/firebase.mjs'
+}                                                 from '/Users/jojo/flask-vite-react/frontend/firebase/firebase.mjs'
+import {
+  AuthContext
+}                                                 from '../Context/AuthContext.jsx'
 
 function JobCard (props) {
+  const [jobSaved, setJobSaved] = useState(false)
+  const authContext = useContext(AuthContext)
+  useEffect(() => {
+    const db = getDatabase(app)
+    const dataRef = ref(db, `users/${authContext.email.substring(0, authContext.email.indexOf('@'))}/userSavedJobs/`)
 
-  const { jobData, colorMode } = props
-  const  authContext  = useContext(AuthContext);
-  console.log('Email: ', authContext.email);
-  console.log('Password: ', authContext.password);
-  if (!jobData) {
-    return null;
-  }
+    const handleDataChange = (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const newChildDataTitle= childSnapshot.val().title
+        const newChildDataLocation = childSnapshot.val().location
+        console.log('New data added', newChildDataTitle, ':', props.job)
 
-  function saveJob (event, index) {
-
-    let job = jobData[index]
-    const jobDataToSave = {
-      'title': job.title,
-      'company': job.company,
-      'location': job.location,
-      'link': job.link
+        if(newChildDataTitle == props.job.title && newChildDataLocation == props.job.location){
+          setJobSaved(prevState => !prevState)
+        }
+      })
     }
 
-    function writeUserData (email) {
-      console.log('email: ', email)
-      console.log(jobDataToSave)
-      const db = getDatabase(app)
-      set(ref(db, `users/${email.substring(0, email.indexOf('@'))}/userSavedJobs/job_${userIdGenerator()}`), jobDataToSave)
+    onValue(dataRef, handleDataChange)
 
+    return () => {
+      off(dataRef, 'value', handleDataChange)
     }
+  }, [])
 
-    writeUserData(authContext.email)
-    alert(`${job.title} has been saved!`)
-    console.log(`${index} clicked`)
-
-
-  }
-
-  function handleViewClick (event) {
-    event.stopPropagation()
-  }
-
-  function userIdGenerator () {
-    let result = ''
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    let i = 0
-    while (i < 4) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length))
-      i++
-    }
-    return result
-  }
-
-  const renderJobCards = () => {
-    console.log('Rendering cards!')
-    return jobData.map((job, index) => (
-
-      <div key={job.link}>
-        <Card
-          style={{
-            width: '24rem',
-            backgroundColor: colorMode ? 'black' : 'white',
-            color: colorMode ? 'white' : 'black',
-          }}
-          className={colorMode ? styles.customDarkMode : styles.customLightMode}
-        >
-          <Link to={`/job/${index}`} className={styles.jobLink}>
+  return (
+    <div key={props.job.link}>
+      <Card
+        style={{
+          width: '24rem',
+          backgroundColor: props.colorMode ? 'black' : 'white',
+          color: props.colorMode ? 'white' : 'black',
+        }}
+        className={props.colorMode ? styles.customDarkMode : styles.customLightMode}
+      >
+        <Link to={`/job/${props.index}`} className={styles.jobLink}>
           <Card.Body>
-            <Card.Title>{job.title}</Card.Title>
+            <Card.Title>{props.job.title}</Card.Title>
             <Card.Subtitle className="mb-2"
-                           style={{ color: colorMode ? 'white' : 'black' }}>
-              {job.company}
+                           style={{ color: props.colorMode ? 'white' : 'black' }}>
+              {props.job.company}
             </Card.Subtitle>
             <Card.Subtitle className="mb-2"
-                           style={{ color: colorMode ? 'white' : 'black' }}>
-              {job.location}
+                           style={{ color: props.colorMode ? 'white' : 'black' }}>
+              {props.job.location}
             </Card.Subtitle>
             <div className={styles['container-button']}>
-                <Card.Link href={job.link} target="_blank"
-                           onClick={handleViewClick}>
-                  View
-                </Card.Link>
-              <Button onClick={(event) => saveJob(event, index)}>Save</Button>
+              <Card.Link href={props.job.link} target="_blank"
+                         onClick={props.handleViewClick}>
+                View
+              </Card.Link>
+              <Button onClick={(event) => props.saveJob(event, props.index)}
+                      disabled={jobSaved}>
+                {jobSaved ? 'Saved' : 'Save'}
+              </Button>
 
             </div>
           </Card.Body>
-          </Link>
-        </Card>
-      </div>
-    ))
-  }
-
-  return <div className={styles['job-grid-container']}>{renderJobCards()}</div>
+        </Link>
+      </Card>
+    </div>
+  )
 }
 
-export default JobCard;
+export default JobCard

@@ -1,6 +1,10 @@
 .styles__saved-jobs{
     display: grid;
-    margin: 2rem 0 0 0 ;
+    margin: 2rem 0 0 0;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
+}
+
+.saved-job-card{
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }

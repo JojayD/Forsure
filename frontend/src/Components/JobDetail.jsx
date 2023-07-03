@@ -1,6 +1,6 @@
-import React         from 'react'
-import { useParams } from 'react-router-dom'
-import { Card }      from 'react-bootstrap'
+import React               from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { Button, Card }    from 'react-bootstrap'
 
 function JobDetail ({ colorMode, jobData }) {
 
@@ -15,6 +15,9 @@ function JobDetail ({ colorMode, jobData }) {
   console.log(jobData)
   return (
     <div>
+      <Link to={`/`}>
+        <Button size={`sm`}>Back</Button>
+      </Link>
       <Card
         style={{
           width: '24rem',
@@ -29,7 +32,7 @@ function JobDetail ({ colorMode, jobData }) {
           <Card.Subtitle className="mb-2">{job.location}</Card.Subtitle>
           <Card.Text>
             {/* Replace this with the detailed job information you want to display. */}
-            Detailed job information goes here.
+            {/*Detailed job information goes here.*/}
           </Card.Text>
           <Card.Link href={job.link} target="_blank">View</Card.Link>
         </Card.Body>
@@ -39,4 +42,4 @@ function JobDetail ({ colorMode, jobData }) {
   )
 }
 
-export default JobDetail
+export default JobDetail;

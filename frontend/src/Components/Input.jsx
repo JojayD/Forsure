@@ -6,8 +6,8 @@ import {
   Form,
   FormControl,
   Spinner
-}                          from 'react-bootstrap'
-import JobCard             from './JobCard.jsx'
+}               from 'react-bootstrap'
+import JobCards from './JobCards.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import styles              from '../Styles/Input.module.css'
 import {
@@ -15,22 +15,28 @@ import {
 }                          from '../data/cities.js'
 
 function Input (props) {
-  const { colorMode, jobData, setJobData, savedJobData, setSavedJobData} = props;
-  const [job, setJob] = useState('');
-  const [location, setLocation] = useState('');
-  const [suggestion, setSuggestions] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    colorMode,
+    jobData,
+    setJobData,
+    savedJobData,
+    setSavedJobData
+  } = props
+  const [job, setJob] = useState('')
+  const [location, setLocation] = useState('')
+  const [suggestion, setSuggestions] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   function handleInput (event) {
-    const input = event.target.value.toLowerCase();
+    const input = event.target.value.toLowerCase()
     const makeSuggestions = city_names.filter(city =>
       city.toLowerCase().startsWith(input))
     setSuggestions(makeSuggestions)
-    setLocation(input);
+    setLocation(input)
   }
 
   async function handleSubmit (event) {
-    event.preventDefault();
+    event.preventDefault()
     const url = new URL('http://localhost:5001/api/search')
     url.searchParams.append('job_title', job.trim())
     url.searchParams.append('location', location.trim())
@@ -62,12 +68,18 @@ function Input (props) {
         <DropdownButton id="dropdown-basic-button"
                         title="Select Location"
                         onSelect={(location) => setLocation(location)}>
-          {suggestion.map((city, index) => {
-            return (
-              <Dropdown.Item key={index}
-                             eventKey={city}>{city}</Dropdown.Item>
-            )
-          })}
+          <Dropdown.Menu style={{
+            maxHeight: '200px',
+            overflowY: 'auto'
+          }}>
+
+            {suggestion.map((city, index) => {
+              return (
+                <Dropdown.Item key={index}
+                               eventKey={city}>{city}</Dropdown.Item>
+              )
+            })}
+          </Dropdown.Menu>
         </DropdownButton>)
     }
     return null
@@ -110,10 +122,10 @@ function Input (props) {
         ) :
         (
           <div>
-            <JobCard jobData={jobData} colorMode={colorMode}/>
+            <JobCards jobData={jobData} colorMode={colorMode}/>
           </div>)}
 
     </div>)
 }
 
-export default Input;
+export default Input
