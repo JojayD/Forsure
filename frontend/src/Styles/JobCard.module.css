@@ -3,7 +3,7 @@
       grid-template-columns: repeat(2, 1fr);
       grid-gap: 1rem;
       margin: 1rem 0;
-    text-decoration: none;
+    /*text-decoration: none;*/
 }
 
 .custom-dark-mode {
@@ -18,6 +18,10 @@
 
 .jobLink{
     text-decoration: none;
+    color: blue;
+}
+a:visited {
+    color: purple;
 }
 
 .container-button{
