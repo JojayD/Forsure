@@ -28,7 +28,6 @@ function LoginPage (props) {
     if (userExist) {
       if (password !== check_password) {
         alert('Wrong password')
-        alert(`${check_password} and ${password}`)
       } else {
         props.setIsAuthenticated(true)
         //using this data for login

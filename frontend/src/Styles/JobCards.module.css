@@ -1,0 +1,33 @@
+
+.job-grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+    margin: 1rem 0;
+    grid-auto-rows: 1fr;
+    height: 100%;
+}
+
+.custom-dark-mode {
+    background-color: black;
+    color: white;
+}
+
+.custom-light-mode {
+    background-color: white;
+    color: black;
+}
+
+.jobLink {
+    text-decoration: none;
+    color: blue;
+}
+
+a:visited {
+    color: purple;
+}
+
+.container-button {
+    display: flex;
+    justify-content: space-between;
+}

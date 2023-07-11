@@ -1,0 +1,17 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container{
+    margin: 2rem 0;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    max-width: 50rem;
+    width: 100%;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    border-radius: 25px;
+    padding: 3rem;
+}

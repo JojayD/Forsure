@@ -2,6 +2,17 @@ import requests
 from bs4 import BeautifulSoup
 
 
+def logoApi():
+    url = "https://api.brandfetch.io/v2/brands/brandfetch.com"
+    api_key = 'o266Z/Fes8JRkYQZhz6bj8/GVvGpiLdpiBrLeD/xOgc='
+    headers = {
+        "accept": "application/json" ,
+        "Authorization": f"Bearer {api_key} "
+    }
+
+    response = requests.get(url ,headers = headers)
+
+
 def scrape_linkedin(job_name: str ,location_name: str):
     job_name = job_name.replace(" " ,"%20")
     location_name = location_name.replace(" " ,"%20")
@@ -34,14 +45,25 @@ def scrape_linkedin(job_name: str ,location_name: str):
         location_el = job_element.find("span" ,
                                        class_ = "job-search-card__location")
         location = location_el.text.strip() if location_el else None
+        time_el = job_element.find("time" ,
+                                   class_ = "job-search-card__listdate")
 
+        result_time_el = time_el.text.strip() if time_el is not None else None
+        salary_el = job_element.find("span" ,
+                                     class_ = 'job-search-card__salary-info')
+        salary_res_el = salary_el.text.strip().replace('\n' ,'') if salary_el \
+                                                                    is not \
+                                                                    None else\
+            None
         jobs.append({
             "title": title_el ,
             "company": company_name ,
             "location": location ,
             "link": link ,
-            # "saved": False
+            "time": result_time_el ,
+            "salary" : salary_res_el
         })
+        print(jobs)
 
     return jobs
 
@@ -65,7 +87,7 @@ def scrape_glass_door(job_name ,location_name):
     else:
         print('Restricted access')
 
-    job_results = soup.find_all('li' , class_ = 'react-job-listing')
+    job_results = soup.find_all('li' ,class_ = 'react-job-listing')
 
     jobs = []
 
@@ -107,5 +129,5 @@ def combine_scraped_jobs(job_name: str ,location_name: str):
 
 
 if __name__ == '__main__':
-    scrape_glass_door('Software Engineering' ,'San Jose')
-    # scrape_linkedin('Software Engineering', 'San Jose')
+    # scrape_glass_door('Software Engineering' ,'San Jose')
+    scrape_linkedin('Software Engineering' ,'San Jose')

@@ -1,73 +1,73 @@
-import { Button, Card }                           from 'react-bootstrap'
-import React, { useContext, useEffect }           from 'react'
+import { Button, Card }                           from 'react-bootstrap';
+import React, { useContext, useEffect }           from 'react';
 import {
   AuthContext
-}                                                 from '../Context/AuthContext.jsx'
-import { Link }                                   from 'react-router-dom'
+}                                                 from '../Context/AuthContext.jsx';
+import { Link }                                   from 'react-router-dom';
 import styles
-                                                  from '../Styles/SavedJobs.module.css'
-import { get, getDatabase, onValue, ref, remove } from 'firebase/database'
+                                                  from '../Styles/SavedJobs.module.css';
+import { get, getDatabase, onValue, ref, remove } from 'firebase/database';
 import {
   app
-}                                                 from '/Users/jojo/flask-vite-react/frontend/firebase/firebase.mjs'
+}                                                 from '/Users/jojo/flask-vite-react/frontend/firebase/firebase.mjs';
 
 function SavedJobs (props) {
-  const authContext = useContext(AuthContext)
+  const authContext = useContext(AuthContext);
   useEffect(() => {
 
-    console.log(props.savedJobData.length)
-    const db = getDatabase(app)
-    const dataRef = ref(db, `users/${authContext.email.substring(0, authContext.email.indexOf('@'))}/userSavedJobs/`)
+    console.log(props.savedJobData.length);
+    const db = getDatabase(app);
+    const dataRef = ref(db, `users/${authContext.email.substring(0, authContext.email.indexOf('@'))}/userSavedJobs/`);
 
     const unsubscribe = onValue(dataRef, (snapshot) => {
       if (snapshot.exists()) {
-        const newData = snapshot.val()
+        const newData = snapshot.val();
         if (newData !== undefined) {
-          const newDataArray = Object.values(newData)
-          props.setSavedJobData(newDataArray)
+          const newDataArray = Object.values(newData);
+          props.setSavedJobData(newDataArray);
         } else {
-          console.log('Null')
-          return null
+          console.log('Null');
+          return null;
         }
       }
-    })
+    });
 
     return () => {
-      unsubscribe()
-    }
+      unsubscribe();
+    };
 
-  }, [])
+  }, []);
 
   function handleViewClick (event) {
-    event.stopPropagation()
+    event.stopPropagation();
   }
 
   function deleteSavedJob (id) {
-    console.log(`Deleting ${id}`)
-    const db = getDatabase(app)
-    const dataRef = ref(db, `users/${authContext.email.substring(0, authContext.email.indexOf('@'))}/userSavedJobs/job_${id}`)
+    console.log(`Deleting ${id}`);
+    const db = getDatabase(app);
+    const dataRef = ref(db, `users/${authContext.email.substring(0, authContext.email.indexOf('@'))}/userSavedJobs/job_${id}`);
     remove(dataRef)
     .then(() => {
-      console.log('Data deleted successfully')
+      console.log('Data deleted successfully');
       // Re-fetch saved jobs data from Firebase
-      const newDataRef = ref(db, `users/${authContext.email.substring(0, authContext.email.indexOf('@'))}/userSavedJobs/`)
+      const newDataRef = ref(db, `users/${authContext.email.substring(0, authContext.email.indexOf('@'))}/userSavedJobs/`);
       get(newDataRef).then(snapshot => {
         if (snapshot.exists()) {
-          const newData = snapshot.val()
+          const newData = snapshot.val();
           if (newData !== undefined) {
-            const newDataArray = Object.values(newData)
-            props.setSavedJobData(newDataArray)
+            const newDataArray = Object.values(newData);
+            props.setSavedJobData(newDataArray);
           } else {
-            props.setSavedJobData([])
+            props.setSavedJobData([]);
           }
         } else {
-          props.setSavedJobData([])
+          props.setSavedJobData([]);
         }
-      })
+      });
     })
     .catch((error) => {
-      console.error('Error deleting data:', error)
-    })
+      console.error('Error deleting data:', error);
+    });
 
   }
 
@@ -92,6 +92,10 @@ function SavedJobs (props) {
                            style={{ color: props.colorMode ? 'white' : 'black' }}>
               {job.location}
             </Card.Subtitle>
+            <Card.Subtitle className="mb-2"
+                           style={{ color: props.colorMode ? 'white' : 'black' }}>
+              {job.time}
+            </Card.Subtitle>
             <div className={styles['container-buttons']}>
               <Card.Link href={job.link} target="_blank"
                          onClick={handleViewClick}>
@@ -103,8 +107,8 @@ function SavedJobs (props) {
           </Card.Body>
         </Card>
       </div>
-    ))
-  }
+    ));
+  };
 
   return (
     <div>
@@ -115,8 +119,8 @@ function SavedJobs (props) {
         className={styles['styles__saved-jobs']}>{renderSavedJobCards()}
       </div>
     </div>
-  )
+  );
 }
 
-export default SavedJobs
+export default SavedJobs;
 
