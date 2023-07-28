@@ -37,5 +37,12 @@
 .form-width{
     width: 100%;
     max-width: 300px;
+}
+
+.container__buttons{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    max-width: 800px;
 
 }

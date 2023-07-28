@@ -1,24 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react';
-import {
-  AuthContext
-}                                                 from '../Context/AuthContext.jsx';
+import React, { useContext, useEffect }      from 'react';
+import { AuthContext }                       from '../Context/AuthContext.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles
-                                                  from '../Styles/JobCards.module.css';
-import { child, get, getDatabase, ref, set }      from 'firebase/database';
+                                             from '../Styles/JobCards.module.css';
+import { child, get, getDatabase, ref, set } from 'firebase/database';
 import {
   app
-}                                                 from '/Users/jojo/flask-vite-react/frontend/firebase/firebase.mjs';
-import JobCard                                    from './JobCard.jsx';
+}                                            from '/Users/jojo/flask-vite-react/frontend/firebase/firebase.mjs';
+import JobCard                               from './JobCard.jsx';
 
 function JobCards (props) {
   //Array that saves the jobs: it remembers which jobs are saved on the page
-  const { jobData, colorMode } = props;
+  const { jobData, colorMode, setSelectedCard, selectedCard } = props;
   const authContext = useContext(AuthContext);
   console.log('Email: ', authContext.email);
   console.log('Password: ', authContext.password);
 
-   const generatedId = userIdGenerator();
+  const generatedId = userIdGenerator();
 
   if (!jobData) {
     return null;
@@ -96,12 +94,14 @@ function JobCards (props) {
                saveJob={saveJob}
                colorMode={colorMode}
                generatedId={generatedId}
-
+               selectedCard={selectedCard}
+               setSelectedCard={setSelectedCard}
       />
     ));
   };
 
-  return <div className={styles['job-grid-container']}>{renderJobCards(generatedId)}</div>;
+  return <div
+    className={styles['job-grid-container']}>{renderJobCards(generatedId)}</div>;
 }
 
 export default JobCards;

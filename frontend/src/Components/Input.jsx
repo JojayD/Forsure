@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Dropdown,
@@ -6,13 +6,13 @@ import {
   Form,
   FormControl,
   Spinner
-}               from 'react-bootstrap'
-import JobCards from './JobCards.jsx'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import styles              from '../Styles/Input.module.css'
+}                                     from 'react-bootstrap';
+import JobCards                       from './JobCards.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import styles                         from '../Styles/Input.module.css';
 import {
   city_names
-}                          from '../data/cities.js'
+}                                     from '../data/cities.js';
 
 function Input (props) {
   const {
@@ -21,45 +21,80 @@ function Input (props) {
     setJobData,
     savedJobData,
     setSavedJobData
-  } = props
-  const [job, setJob] = useState('')
-  const [location, setLocation] = useState('')
-  const [suggestion, setSuggestions] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  } = props;
+  const [job, setJob] = useState('');
+  const [location, setLocation] = useState('');
+  const [suggestion, setSuggestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
 
-  function handleInput (event) {
-    const input = event.target.value.toLowerCase()
-    const makeSuggestions = city_names.filter(city =>
-      city.toLowerCase().startsWith(input))
-    setSuggestions(makeSuggestions)
-    setLocation(input)
-  }
+  useEffect(() => {
+    // Default job and location values
+    const defaultJob = 'Software Engineer';
+    const defaultLocation = 'San Francisco';
 
-  async function handleSubmit (event) {
-    event.preventDefault()
-    const url = new URL('http://localhost:5001/api/search')
-    url.searchParams.append('job_title', job.trim())
-    url.searchParams.append('location', location.trim())
-    console.log('Sending request to:', url)
-    setIsLoading(true)
+    fetchDefaultJob(defaultJob, defaultLocation).then(r => console.log(r));
+  }, []); // Empty dependency array to run only on mount
+
+  async function fetchDefaultJob (job, location) {
+    const url = new URL('http://localhost:5001/api/search');
+    url.searchParams.append('job_title', job.trim());
+    url.searchParams.append('location', location.trim());
+    console.log('Sending request to:', url);
+    setIsLoading(true);
     try {
       const response = await fetch(url, {
         mode: 'cors'
-      })
-      const [arr1, arr2] = await response.json()
-      const combinedArray = [...arr1, ...arr2]
-      setJobData(combinedArray)
-      console.log('Response data:', combinedArray)
+      });
+      const [arr1, arr2] = await response.json();
+      const combinedArray = [...arr1, ...arr2];
+      setJobData(combinedArray),
+        console.log('Response data:', combinedArray);
     } catch (error) {
       if (error instanceof SyntaxError) {
-        console.error('Error occurred while fetching data: Response not valid JSON')
+        console.error('Error occurred while fetching data: Response not valid JSON');
       } else {
-        console.error('Error occurred while fetching data:', error)
+        console.error('Error occurred while fetching data:', error);
       }
     }
-    setIsLoading(false)
-    setJob('')
-    setLocation('')
+    setIsLoading(false);
+    setJob('');
+    setLocation('');
+  }
+
+  function handleInput (event) {
+    const input = event.target.value.toLowerCase();
+    const makeSuggestions = city_names.filter(city =>
+      city.toLowerCase().startsWith(input));
+    setSuggestions(makeSuggestions);
+    setLocation(input);
+  }
+
+  async function handleSubmit (event) {
+    event.preventDefault();
+    const url = new URL('http://localhost:5001/api/search');
+    url.searchParams.append('job_title', job.trim());
+    url.searchParams.append('location', location.trim());
+    console.log('Sending request to:', url);
+    setIsLoading(true);
+    try {
+      const response = await fetch(url, {
+        mode: 'cors'
+      });
+      const [arr1, arr2] = await response.json();
+      const combinedArray = [...arr1, ...arr2];
+      setJobData(combinedArray),
+        console.log('Response data:', combinedArray);
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        console.error('Error occurred while fetching data: Response not valid JSON');
+      } else {
+        console.error('Error occurred while fetching data:', error);
+      }
+    }
+    setIsLoading(false);
+    setJob('');
+    setLocation('');
   }
 
   function renderDropDown () {
@@ -77,12 +112,12 @@ function Input (props) {
               return (
                 <Dropdown.Item key={index}
                                eventKey={city}>{city}</Dropdown.Item>
-              )
+              );
             })}
           </Dropdown.Menu>
-        </DropdownButton>)
+        </DropdownButton>);
     }
-    return null
+    return null;
   }
 
   return (
@@ -94,7 +129,7 @@ function Input (props) {
               <FormControl type="text"
                            placeholder="Search for jobs!"
                            value={job}
-                           onChange={(e) => {setJob(e.target.value)}}/>
+                           onChange={(e) => {setJob(e.target.value);}}/>
             </div>
             <div className={styles['form-width']}>
               <FormControl
@@ -121,11 +156,31 @@ function Input (props) {
 
         ) :
         (
-          <div>
-            <JobCards jobData={jobData} colorMode={colorMode}/>
+
+          <div className={styles['container__split']}>
+            <div className={styles['container__split--left']}>
+              {selectedCard ? (
+                <>
+                  <h2>{selectedCard.title}</h2>
+                  <h2>{selectedCard.company}</h2>
+                  <h3>{selectedCard.location}</h3>
+                  <h4>{selectedCard.salary}</h4>
+                  <h4>{selectedCard.time}</h4>
+                  <a href={selectedCard.link} target={`_blank`}>View</a>
+                </>) : (
+                <div></div>)
+              }
+            </div>
+
+
+            <div className={styles['container__split--right']}>
+              <JobCards jobData={jobData} colorMode={colorMode}
+                        selectedCard={selectedCard}
+                        setSelectedCard={setSelectedCard}/>
+            </div>
           </div>)}
 
-    </div>)
+    </div>);
 }
 
-export default Input
+export default Input;

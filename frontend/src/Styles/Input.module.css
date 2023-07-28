@@ -1,24 +1,49 @@
-.form__container{
-  display: flex;
-  justify-content: space-between;
+.form__container {
+    display: flex;
+    justify-content: space-between;
 
 }
-.form-width{
+
+.form-width {
     width: 300px;
 }
 
-.button__container{
+.button__container {
     margin-top: 2rem;
     display: flex;
     justify-content: center;
 }
 
-.parent-form__container{
-    margin-bottom:2rem
+.parent-form__container {
+    margin-bottom: 2rem;
 }
 
-.spinner{
+.spinner {
     display: flex;
     justify-content: center;
 }
 
+.container__split {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+    max-width: 1000px;
+}
+
+.container__split--right {
+    /*display: flex;*/
+    /*justify-content: flex-end;*/
+    height: 100vh;
+    overflow-y: auto;
+
+}
+
+.container__split--left{
+    margin-top: 15px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    text-align: center;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

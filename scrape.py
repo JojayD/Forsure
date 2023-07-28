@@ -1,5 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+
 
 
 def logoApi():
@@ -32,39 +37,56 @@ def scrape_linkedin(job_name: str ,location_name: str):
     job_elements = soup.find_all("div" ,class_ = "base-card")
 
     jobs = []
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(options = chrome_options)
+    driver.get(url)
+    time.sleep(1)
+    scroll_pause_time = 1
+    screen_height = driver.execute_script("return window.screen.height;")
+    i = 1
 
-    for job_element in job_elements:
-        title_el = job_element.find("h3" ,
-                                    class_ = "base-search-card__title").text.strip()
+    while i < 3:
+        driver.execute_script(f"window.scrollTo(0, '{screen_height}*{i}');")
+        i+=1
+        time.sleep(scroll_pause_time)
+        scroll_height = driver.execute_script("return document.body.scrollHeight;")
+        print(scroll_height)
+        if screen_height * i > scroll_height:
+            break
 
-        link_el = job_element.find("a" ,class_ = "base-card__full-link")
-        link = link_el.get("href") if link_el else None
-        company_name = job_element.find("h4" ,
-                                        class_ = 'base-search-card__subtitle').text.strip()
+        for job_element in job_elements:
+            title_el = job_element.find("h3" ,
+                                        class_ = "base-search-card__title").text.strip()
 
-        location_el = job_element.find("span" ,
-                                       class_ = "job-search-card__location")
-        location = location_el.text.strip() if location_el else None
-        time_el = job_element.find("time" ,
-                                   class_ = "job-search-card__listdate")
+            link_el = job_element.find("a" ,class_ = "base-card__full-link")
+            link = link_el.get("href") if link_el else None
+            company_name = job_element.find("h4" ,
+                                            class_ = 'base-search-card__subtitle').text.strip()
 
-        result_time_el = time_el.text.strip() if time_el is not None else None
-        salary_el = job_element.find("span" ,
-                                     class_ = 'job-search-card__salary-info')
-        salary_res_el = salary_el.text.strip().replace('\n' ,'') if salary_el \
-                                                                    is not \
-                                                                    None else\
-            None
-        jobs.append({
-            "title": title_el ,
-            "company": company_name ,
-            "location": location ,
-            "link": link ,
-            "time": result_time_el ,
-            "salary" : salary_res_el
-        })
-        print(jobs)
+            location_el = job_element.find("span" ,
+                                           class_ = "job-search-card__location")
+            location = location_el.text.strip() if location_el else None
+            time_el = job_element.find("time" ,
+                                       class_ = "job-search-card__listdate")
 
+            result_time_el = time_el.text.strip() if time_el is not None else None
+            salary_el = job_element.find("span" ,
+                                         class_ = 'job-search-card__salary-info')
+            salary_res_el = salary_el.text.strip().replace('\n' ,'') if salary_el \
+                                                                        is not \
+                                                                        None else\
+                None
+            jobs.append({
+                "title": title_el ,
+                "company": company_name ,
+                "location": location ,
+                "link": link ,
+                "time": result_time_el ,
+                "salary" : salary_res_el
+            })
+            print(jobs)
+    print(len(jobs))
     return jobs
 
 
