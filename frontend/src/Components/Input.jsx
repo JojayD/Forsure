@@ -168,7 +168,9 @@ function Input (props) {
                   <h4>{selectedCard.time}</h4>
                   <a href={selectedCard.link} target={`_blank`}>View</a>
                 </>) : (
-                <div></div>)
+                <div>
+                  Click on the arrow to view job
+                </div>)
               }
             </div>
 
